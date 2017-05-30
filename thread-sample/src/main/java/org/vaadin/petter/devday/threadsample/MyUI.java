@@ -29,12 +29,13 @@ public class MyUI extends UI {
 
     private void pollBackend() {
         while (true) {
-            Logger.getLogger(MyUI.class.getName()).info("Polling backend from UI " + this);
-            Optional<String> latestMessage = MyBackend.getLatestMessage();
-            if (latestMessage.isPresent()) {
-                access(() -> layout.addComponent(new Label(latestMessage.get())));
-            }
             try {
+                Logger.getLogger(MyUI.class.getName()).info("Polling backend from UI " + this);
+                Optional<String> latestMessage = MyBackend.getLatestMessage();
+                if (latestMessage.isPresent()) {
+                    access(() -> layout.addComponent(new Label(latestMessage.get())));
+                }
+
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
