@@ -24,8 +24,6 @@ public class MyUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         layout = new VerticalLayout();
-        layout.setMargin(true);
-        layout.setSpacing(true);
         setContent(layout);
         timer = new Timer("PollingTimer@" + toString());
         timer.schedule(new TimerTask() {

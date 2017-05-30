@@ -19,8 +19,6 @@ public class MyUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         layout = new VerticalLayout();
-        layout.setMargin(true);
-        layout.setSpacing(true);
         setContent(layout);
         addPollListener(event -> pollBackend());
         setPollInterval(1000);

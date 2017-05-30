@@ -21,20 +21,19 @@ public class MyUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         layout = new VerticalLayout();
-        layout.setMargin(true);
-        layout.setSpacing(true);
         setContent(layout);
         new Thread(this::pollBackend, "PollingThread@" + toString()).start();
     }
 
     private void pollBackend() {
         while (true) {
-            Logger.getLogger(MyUI.class.getName()).info("Polling backend from UI " + this);
-            Optional<String> latestMessage = MyBackend.getLatestMessage();
-            if (latestMessage.isPresent()) {
-                access(() -> layout.addComponent(new Label(latestMessage.get())));
-            }
             try {
+                Logger.getLogger(MyUI.class.getName()).info("Polling backend from UI " + this);
+                Optional<String> latestMessage = MyBackend.getLatestMessage();
+                if (latestMessage.isPresent()) {
+                    access(() -> layout.addComponent(new Label(latestMessage.get())));
+                }
+
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
