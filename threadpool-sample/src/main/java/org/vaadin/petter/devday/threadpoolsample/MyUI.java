@@ -1,17 +1,5 @@
 package org.vaadin.petter.devday.threadpoolsample;
 
-import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
-
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
-import javax.servlet.annotation.WebServlet;
-
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
@@ -19,6 +7,16 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+import javax.servlet.annotation.WebServlet;
+import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 @Push
 public class MyUI extends UI {
@@ -35,13 +33,13 @@ public class MyUI extends UI {
 
     @Override
     public void detach() {
-        Logger.getLogger(MyUI.class.getName()).info("Cancelling job in UI " + this);
+        System.out.println("Cancelling job... UI: " + hashCode());
         job.cancel(true);
         super.detach();
     }
 
     private void pollBackend() {
-        Logger.getLogger(MyUI.class.getName()).info("Polling backend from UI " + this);
+        System.out.println("Polling backend... UI: " + hashCode());
         Optional<String> latestMessage = MyBackend.getLatestMessage();
         if (latestMessage.isPresent()) {
             access(() -> layout.addComponent(new Label(latestMessage.get())));

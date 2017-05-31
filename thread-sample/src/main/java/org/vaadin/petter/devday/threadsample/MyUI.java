@@ -1,10 +1,5 @@
 package org.vaadin.petter.devday.threadsample;
 
-import java.util.Optional;
-import java.util.logging.Logger;
-
-import javax.servlet.annotation.WebServlet;
-
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
@@ -12,6 +7,9 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import javax.servlet.annotation.WebServlet;
+import java.util.Optional;
 
 @Push
 public class MyUI extends UI {
@@ -22,13 +20,13 @@ public class MyUI extends UI {
     protected void init(VaadinRequest request) {
         layout = new VerticalLayout();
         setContent(layout);
-        new Thread(this::pollBackend, "PollingThread@" + toString()).start();
+        new Thread(this::pollBackend).start();
     }
 
     private void pollBackend() {
         while (true) {
             try {
-                Logger.getLogger(MyUI.class.getName()).info("Polling backend from UI " + this);
+                System.out.println("Polling backend...");
                 Optional<String> latestMessage = MyBackend.getLatestMessage();
                 if (latestMessage.isPresent()) {
                     access(() -> layout.addComponent(new Label(latestMessage.get())));

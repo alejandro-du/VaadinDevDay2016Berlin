@@ -1,12 +1,5 @@
 package org.vaadin.petter.devday.timersample;
 
-import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Logger;
-
-import javax.servlet.annotation.WebServlet;
-
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
@@ -14,6 +7,11 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import javax.servlet.annotation.WebServlet;
+import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Push
 public class MyUI extends UI {
@@ -25,7 +23,7 @@ public class MyUI extends UI {
     protected void init(VaadinRequest request) {
         layout = new VerticalLayout();
         setContent(layout);
-        timer = new Timer("PollingTimer@" + toString());
+        timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -36,13 +34,13 @@ public class MyUI extends UI {
 
     @Override
     public void detach() {
-        Logger.getLogger(MyUI.class.getName()).info("Stopping timer in UI " + this);
+        System.out.println("Stopping timer...");
         timer.cancel();
         super.detach();
     }
 
     private void pollBackend() {
-        Logger.getLogger(MyUI.class.getName()).info("Polling backend from UI " + this);
+        System.out.println("Polling backend...");
         Optional<String> latestMessage = MyBackend.getLatestMessage();
         if (latestMessage.isPresent()) {
             access(() -> layout.addComponent(new Label(latestMessage.get())));
